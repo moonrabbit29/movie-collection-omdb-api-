@@ -1,0 +1,20 @@
+{
+  "name": "omdpapi",
+  "version": "1.0.0",
+  "description": "Simple consume api web",
+  "main": "index.js",
+  "dependencies": {
+    "bootstrap": "^4.6.0",
+    "jquery": "^3.6.0",
+    "webpack": "^5.30.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Dendi",
+  "license": "ISC",
+  "devDependencies": {
+    "exports-loader": "^2.0.0",
+    "webpack-cli": "^4.6.0"
+  }
+}
