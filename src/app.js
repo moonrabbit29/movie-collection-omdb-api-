@@ -1,47 +1,36 @@
 import 'bootstrap';
 import './scss/app.scss';
-import * as $ from 'jquery'
 
 
-$('.search-button').on('click',function(){
-  $.ajax({
-      url: 'http://www.omdbapi.com/?apikey=3643c910&s='+$('.input-keyword').val(),
-      success: results => {
-          const movies = results.Search;
-          let cards = ``;
-          console.log(movies);
-          movies.forEach(m => {
-              cards += showCards(m);
+const searchButton = document.querySelector('.search-button');
+searchButton.addEventListener('click',function(){
+  const inputKeyword = document.querySelector('.input-keyword');
+  fetch('http://www.omdbapi.com/?apikey=3643c910&s='+inputKeyword.value)
+   .then(response =>response.json())
+   .then(response =>{
+    const movies = response.Search;
+    let cards = '';
+    movies.forEach(m => cards += showCards(m));
+    const movieContainer = document.querySelector('.movie-container');
+    movieContainer.innerHTML = cards;
+    //ketika tombol detail diklik
+    const modalButton = document.querySelectorAll('.modal-detail-button');
+    modalButton.forEach(btnn => {
+      btnn.addEventListener('click',function(){
+        const imdbid = this.dataset.imdbid;
+        console.log(imdbid);
+        fetch('http://www.omdbapi.com/?apikey=3643c910&i='+imdbid)
+          .then(response=>response.json())
+          .then(response=>{
+            console.log(response);
+            const movieDetail = showMovieDetail(response);
+            const modalBody = document.querySelector('.modal-body');
+            modalBody.innerHTML = movieDetail;
           });
-          $('.movie-container').html(cards);
-  
-          //ketika tombol detail di-klik
-          $('.modal-detail-button').on('click', function () {
-              $.ajax({
-                  url: 'http://www.omdbapi.com/?apikey=3643c910&i=' + $(this).data('imdbid'),
-                  success: m => {
-                      if(typeof(m)==='undefined'){
-                        prompt("Movie tidak tersedia")
-                      }
-                      console.log(m);
-                      const movieDetail =
-                      $('.modal-body').html(movieDetail);
-                  },
-                  error: (e) => {
-                      console.log(e.responseText);
-                  },
-                  type : "GET"
-              });
-          })
-  
-      },
-      error: (e) => {
-          console.log("not working");
-      },
-      type: "POST"
-  
-  })
-})
+      })
+    })
+  });
+});
 
 function showCards(m){
   return `<div class="col-md-4 mt-5">
